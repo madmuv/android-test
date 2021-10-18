@@ -1,0 +1,54 @@
+package com.donyawan.testandroid.viewmodel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
+import com.donyawan.testandroid.db.TaskDatabase
+import com.donyawan.testandroid.db.TaskEntry
+import com.donyawan.testandroid.repo.TaskRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class TaskViewModel(application: Application): AndroidViewModel(application) {
+    private val taskDao = TaskDatabase.getDatabase(application).taskDao()
+    private val repository: TaskRepository
+
+    val getAllTask : LiveData<List<TaskEntry>>
+    val getAllPriorityTask: LiveData<List<TaskEntry>>
+
+
+    init {
+        repository = TaskRepository(taskDao)
+        getAllTask = repository.getAllTask()
+        getAllPriorityTask = repository.getAllPriorityTask()
+    }
+
+    fun insert(taskEntry: TaskEntry) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insert(taskEntry)
+        }
+    }
+
+    fun delete(taskEntry: TaskEntry) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteItem(taskEntry)
+        }
+    }
+
+    fun update(taskEntry: TaskEntry) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(taskEntry)
+        }
+    }
+
+    fun deleteAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAll()
+        }
+    }
+
+    fun searchDatabase(searchQuery: String) : LiveData<List<TaskEntry>> {
+        return repository.searchDatabase(searchQuery)
+    }
+}

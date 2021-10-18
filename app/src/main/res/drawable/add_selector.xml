@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/disable_add" />
+    <item android:drawable="@drawable/disable_add" android:state_enabled="false" tools:ignore="StateListReachable" />
+    <item android:drawable="@drawable/enable_add" android:state_enabled="true" />
+</selector>
